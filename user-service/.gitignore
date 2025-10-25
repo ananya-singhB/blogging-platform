@@ -13,6 +13,10 @@ jwt-secret.txt
 *.log
 npm-debug.log*
 
+# TypeScript
+dist/
+*.tsbuildinfo
+
 # Lock file
 package-lock.json
 
