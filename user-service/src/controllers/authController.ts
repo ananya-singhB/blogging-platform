@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import User from '../models/User.ts';
+import User from '../models/User.js';
 import { env } from '../config/env.js';
 
 const generateToken = (userId: string, email: string): string => {

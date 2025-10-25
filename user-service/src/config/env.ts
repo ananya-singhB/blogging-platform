@@ -1,3 +1,15 @@
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Load .env from project root (go up 2 levels from src/config/)
+const envPath = resolve(__dirname, '../../.env');
+console.log('Loading .env from:', envPath);
+dotenv.config({ path: envPath });
+
 interface Environment {
   PORT: number;
   NODE_ENV: 'development' | 'production' | 'test';
@@ -17,7 +29,7 @@ function validateEnv(): Environment {
   }
 
   return {
-    PORT: parseInt(process.env.PORT || '3001', 10),
+    PORT: parseInt(process.env.PORT || '4001', 10),
     NODE_ENV: (process.env.NODE_ENV as Environment['NODE_ENV']) || 'development',
     MONGO_URI: process.env.MONGO_URI!,
     JWT_SECRET: process.env.JWT_SECRET!,

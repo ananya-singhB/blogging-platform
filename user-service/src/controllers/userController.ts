@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import User from '../models/User.ts';
-import { env } from '../config/env.ts';
+import User from '../models/User.js'
+import { env } from '../config/env.js';
 
 export const getProfile = async (req: Request, res: Response): Promise<void> => {
   try {
