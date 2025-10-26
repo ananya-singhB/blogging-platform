@@ -8,6 +8,9 @@ export interface IUser extends Document {
   bio?: string;
   avatar?: string;
   isActive: boolean;
+  isEmailVerified: boolean;
+  emailVerificationToken?: string;
+  emailVerificationExpires?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
