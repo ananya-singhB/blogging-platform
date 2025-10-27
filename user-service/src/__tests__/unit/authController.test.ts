@@ -1,3 +1,4 @@
+import { jest, describe, it, expect } from '@jest/globals'
 import { Request, Response } from 'express'
 import {
   register,
@@ -40,6 +41,8 @@ describe('Auth Controller - Register', () => {
     expect(user).toBeTruthy()
     expect(user?.name).toBe('John Doe')
     expect(user?.isEmailVerified).toBe(false)
+    // Don't check user.userId - it doesn't exist on the document
+    // If you need to check it, use: expect(user?._id).toBeDefined()
   })
 
   it('should not register user with existing email', async () => {
@@ -210,7 +213,7 @@ describe('Auth Controller - Email Verification', () => {
   })
 
   it('should not verify email with expired token', async () => {
-    const expiredDate = new Date(Date.now() - 1000) // 1 second ago
+    const expiredDate = new Date(Date.now() - 1000)
     const user = await createUnverifiedUser()
     user.emailVerificationExpires = expiredDate
     await user.save()
