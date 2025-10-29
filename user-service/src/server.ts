@@ -1,37 +1,54 @@
-import express, { Request, Response, NextFunction } from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
+import express, { Request, Response, NextFunction } from 'express'
+import cors from 'cors'
+import helmet from 'helmet'
 
-import { env } from './config/env.js';
-import connectDB from './config/db.js';
-import authRoutes from './routes/authRoutes.js';
-import userRoutes from './routes/userRoutes.js';
+import { env } from './config/env.js'
+import connectDB from './config/db.js'
+import authRoutes from './routes/authRoutes.js'
+import userRoutes from './routes/userRoutes.js'
+import multer from 'multer'
 
-const app = express();
+const app = express()
 
 // Connect to database
-connectDB();
+connectDB()
 
 // Security middleware
-app.use(helmet());
+app.use(helmet())
 
 // CORS configuration using validated env
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin) return callback(null, true);
-    
-    if (env.ALLOWED_ORIGINS.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (env.ALLOWED_ORIGINS.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        console.log('❌ CORS blocked:', origin);
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true
+  })
+);
 
 // Body parser middleware
+
+const upload = multer();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(upload.none());
+
+// To debug
+// app.use((req: Request, res: Response, next: NextFunction) => {
+//   console.log('📍 Method:', req.method)
+//   console.log('📍 URL:', req.url)
+//   console.log('📍 Content-Type:', req.headers['content-type'])
+//   console.log('📍 Body:', req.body)
+//   console.log('📍 Raw Headers:', req.headers)
+//   console.log('-------------------')
+//   next()
+// })
 
 // API Routes
 app.use('/api/auth', authRoutes);
